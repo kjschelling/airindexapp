@@ -1,13 +1,12 @@
 import "./App.css";
+import AirIndexCard from "./components/AirIndexCard";
+import ZipCodeForm from "./components/ZipCodeForm";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-      </header>
+      {/* <AirIndexCard /> */}
+      <ZipCodeForm />
     </div>
   );
 }
