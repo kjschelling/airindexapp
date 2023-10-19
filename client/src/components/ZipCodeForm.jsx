@@ -1,22 +1,29 @@
 import React from "react";
 
-export default function ZipCodeForm() {
+export default function ZipCodeForm({ zipCode, setZipCode, postZipCode }) {
+  const handleSubmit = () => {
+    postZipCode(zipCode);
+  };
   return (
     <div className="">
-      <h1 class="mt-5">Air Quality Index Information </h1>
-      <div class="form-outline">
-        <div class="card p-5 w-80 mt-5">
-          <label class="form-label" for="form12">
+      <h1 className="mt-5">Air Quality Index Information </h1>
+      <div className="form-outline">
+        <form onSubmit={handleSubmit} className="card p-5 w-80 mt-5">
+          <label className="form-label" htmlFor="zipCode">
             Enter your zip code
           </label>
           <input
             type="text"
-            id="form12"
-            placeholder="Enter your zipcode"
-            class="form-control"
+            name="zipCode"
+            id="zipCode"
+            onChange={(e) => setZipCode(e.target.value)}
+            placeholder="Enter zipcode"
+            className="form-control"
           />
-          <button class="btn btn-primary m-4">Get Info</button>
-        </div>
+          <button className="btn btn-primary m-4" type="submit">
+            Get Info
+          </button>
+        </form>
       </div>
     </div>
   );
