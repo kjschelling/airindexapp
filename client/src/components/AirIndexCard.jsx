@@ -4,11 +4,11 @@ export default function AirIndexCard() {
   return (
     <div>
       {/* Jumbotron div */}
-      <div class="jumbotron">
+      <div className="jumbotron">
         <h1>Hello, world!</h1>
         <p></p>
         <p>
-          <a class="btn btn-primary btn-lg" role="button">
+          <a className="btn btn-primary btn-lg" role="button">
             Learn more
           </a>
         </p>
