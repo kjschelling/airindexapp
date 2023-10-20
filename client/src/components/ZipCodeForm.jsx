@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 
+const APIKey = "f500ae6df08d77e7f8abede7b3712209";
 class ZipCodeForm extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       zipcode: "",
+      long: "",
+      lat: "",
     };
   }
 
@@ -16,7 +19,16 @@ class ZipCodeForm extends React.Component {
   //handle submit makes an API call to geocode API to get long / lat from zipcode
   handleSubmit = (e) => {
     e.preventDefault();
-    console.log(this.state.zipcode);
+
+    fetch(
+      `http://api.openweathermap.org/geo/1.0/zip?zip=${this.state.zipcode}&appid=${APIKey}`
+    )
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (jsonData) {
+        return JSON.stringify(jsonData);
+      });
   };
 
   render() {
@@ -35,6 +47,7 @@ class ZipCodeForm extends React.Component {
               onChange={this.handleZipCodeChange}
               placeholder="Enter ZIP Code"
               className="form-control"
+              ref={(input) => (this.forminput = input)}
             />
             <button className="btn btn-primary m-4" type="submit">
               Get Info

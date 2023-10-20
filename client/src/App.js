@@ -2,8 +2,7 @@ import "./App.css";
 // import AirIndexCard from "./components/AirIndexCard";
 import ZipCodeForm from "./components/ZipCodeForm";
 import NavBar from "./components/NavBar";
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
 
 //state lifecycle
 
