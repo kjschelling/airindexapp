@@ -7,12 +7,13 @@ class ZipCodeForm extends React.Component {
 
     this.state = {
       zipcode: "",
-      long: "",
-      lat: "",
+      coordinates: { latitude: "", longitude: "" },
+      airQualityIndex: "",
     };
   }
 
-  handleZipCodeChange = (e) => {
+  //sets the input data to zipcode
+  handleChange = (e) => {
     this.setState({ zipcode: e.target.value });
   };
 
@@ -20,17 +21,21 @@ class ZipCodeForm extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    fetch(
-      `http://api.openweathermap.org/geo/1.0/zip?zip=${this.state.zipcode}&appid=${APIKey}`
-    )
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (jsonData) {
-        return JSON.stringify(jsonData);
-      });
-  };
+    // fetch coordinates
+    try {
+      const response = fetch(
+        `http://api.openweathermap.org/geo/1.0/zip?zip=${this.state.zipcode}&appid=${APIKey}`
+      );
+      console.log(response.json);
+      // const lat = data.results
+      // const lng =
+      // What does my data look like
+    } catch (error) {
+      console.error("Error fetching coordinates:", error);
+    }
 
+    // fetch air quality data
+  };
   render() {
     return (
       <form onSubmit={this.handleSubmit}>
@@ -44,7 +49,7 @@ class ZipCodeForm extends React.Component {
               type="text"
               name="zipcode"
               value={this.state.zipcode}
-              onChange={this.handleZipCodeChange}
+              onChange={this.handleChange}
               placeholder="Enter ZIP Code"
               className="form-control"
               ref={(input) => (this.forminput = input)}
