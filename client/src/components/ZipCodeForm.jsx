@@ -21,16 +21,20 @@ function ZipCodeForm() {
       }
       //
       setCoordinates({ lat: data.lat, lon: data.lon });
-      console.log(coordinates); //do i have the coordinates?
+      console.log(
+        `These are the coordinates from the zipcode: Lat: ${coordinates.lat},Lon: ${coordinates.lon}`
+      ); //do i have the coordinates?
 
       //yes, then make the API call with the correct coordinates
-      if (coordinates) {
-        const airIndexResponse = await fetch(
-          `https://api.openweathermap.org/data/2.5/air_pollution?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${process.env.REACT_APP_API_KEY}`
-        );
-        const pollutionData = await airIndexResponse.json();
+      // if (coordinates.lat && coordinates.lon !== null) {
+      const airIndexResponse = await fetch(
+        `https://api.openweathermap.org/data/2.5/air_pollution?lat=${data.lat}&lon=${data.lon}&appid=${process.env.REACT_APP_API_KEY}`
+      );
+      const pollutionData = await airIndexResponse.json();
+      if (pollutionData) {
         setAirData(pollutionData);
-        console.log(airData);
+        // console.log(`This is the air quality data: ${airData}`);
+        console.log(airData.list[0].components);
       }
     } catch (error) {
       console.error(error);
