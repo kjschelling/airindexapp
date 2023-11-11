@@ -1,67 +1,65 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 
-const APIKey = "f500ae6df08d77e7f8abede7b3712209";
-class ZipCodeForm extends React.Component {
-  constructor(props) {
-    super(props);
+function ZipCodeForm() {
+  // setting states
+  const [zipcode, setZipcode] = useState("");
+  const [coordinates, setCoordinates] = useState({ lat: null, lon: null });
+  const [airData, setAirData] = useState(null);
 
-    this.state = {
-      zipcode: "",
-      coordinates: { latitude: "", longitude: "" },
-      airQualityIndex: "",
-    };
-  }
-
-  //sets the input data to zipcode
-  handleChange = (e) => {
-    this.setState({ zipcode: e.target.value });
-  };
-
-  //handle submit makes an API call to geocode API to get long / lat from zipcode
-  handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // fetch coordinates
     try {
-      const response = fetch(
-        `http://api.openweathermap.org/geo/1.0/zip?zip=${this.state.zipcode}&appid=${APIKey}`
+      // fetching coordinates
+      const response = await fetch(
+        `https://api.openweathermap.org/geo/1.0/zip?zip=${zipcode},us&appid=${process.env.REACT_APP_API_KEY}`
       );
-      console.log(response.json);
-      // const lat = data.results
-      // const lng =
-      // What does my data look like
-    } catch (error) {
-      console.error("Error fetching coordinates:", error);
-    }
+      console.log(zipcode);
+      const data = await response.json();
+      if (data.length === 0) {
+        throw new Error("Invalid zipcode");
+      }
+      //
+      setCoordinates({ lat: data.lat, lon: data.lon });
+      console.log(coordinates); //do i have the coordinates?
 
-    // fetch air quality data
+      //yes, then make the API call with the correct coordinates
+      if (coordinates) {
+        const airIndexResponse = await fetch(
+          `https://api.openweathermap.org/data/2.5/air_pollution?lat=${coordinates.lat}&lon=${coordinates.lon}&appid=${process.env.REACT_APP_API_KEY}`
+        );
+        const pollutionData = await airIndexResponse.json();
+        setAirData(pollutionData);
+        console.log(airData);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
-  render() {
-    return (
-      <form onSubmit={this.handleSubmit}>
-        <h1 className="mt-5">Air Quality Index Information </h1>
-        <div className="form-outline">
-          <div className="card p-5 w-80 mt-5">
-            <label className="form-label" htmlFor="zipCode">
-              Zip Code
-            </label>
-            <input
-              type="text"
-              name="zipcode"
-              value={this.state.zipcode}
-              onChange={this.handleChange}
-              placeholder="Enter ZIP Code"
-              className="form-control"
-              ref={(input) => (this.forminput = input)}
-            />
-            <button className="btn btn-primary m-4" type="submit">
-              Get Info
-            </button>
-          </div>
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <h1 className="mt-5">Air Quality Index Information </h1>
+      <div className="form-outline">
+        <div className="card p-5 w-80 mt-5">
+          <label className="form-label" htmlFor="zipCode">
+            Zip Code
+          </label>
+          <input
+            type="text"
+            name="zipcode"
+            value={zipcode}
+            onChange={(e) => setZipcode(e.target.value)}
+            placeholder="Enter ZIP Code"
+            className="form-control"
+          />
+          <button className="btn btn-primary m-4" type="submit">
+            Get Info
+          </button>
         </div>
-      </form>
-    );
-  }
+      </div>
+    </form>
+  );
 }
 
 export default ZipCodeForm;
